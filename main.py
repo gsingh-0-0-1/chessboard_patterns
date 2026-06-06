@@ -7,6 +7,7 @@ import colorsys
 import time
 import shutil
 import os
+import json
 
 def coords_to_spiral_index(x, y):
 	radius = max(abs(x), abs(y))
@@ -69,22 +70,31 @@ def board_square_dict(attacked_by: set = set(), played_by: int = -1):
 	}
 
 DEFAULT_BOARD_SQUARE_DICT = {'attacked_by' : set(), 'played_by' : -1}
-
-RELATIVE_ATTACK_POSITIONS = np.loadtxt('relative_attack_positions.txt')
+DEFAULT_REL_ATTACK_POS = [
+	[-2, -1],
+	[-2, 1],
+	[-1, -2],
+	[-1, 2],
+	[1, -2],
+	[1, 2],
+	[2, -1],
+	[2, 1]
+]
 
 class Board:
-	def __init__(self, radius = 100, nplayers = 1):
+	def __init__(self, radius = 100, nplayers = 1, relative_attack_positions = DEFAULT_REL_ATTACK_POS):
 		self.radius = radius
 		self.board = defaultdict(lambda : {'attacked_by' : set(), 'played_by' : -1})
 		self.lowest_playables = [0 for i in range(nplayers)]
 		self.nplayers = nplayers
 		self.arr = np.zeros(shape = (2 * radius + 1, 2 * radius + 1, 3)) + 1
+		self.relative_attack_positions = relative_attack_positions
 
 	def get_attacked_positions(self, n):
 		coords = spiral_index_to_coords(n)
 		positions = []
 
-		for pos in RELATIVE_ATTACK_POSITIONS:
+		for pos in self.relative_attack_positions:
 			positions.append((coords[0] + pos[0], coords[1] + pos[1]))
 		return positions
 
@@ -126,7 +136,12 @@ class Board:
 
 
 def main():
-	board = Board(nplayers = 2, radius = 400)
+	with open('config.json', 'r') as f:
+		CONFIG = json.load(f)
+	NPLAYERS = int(CONFIG['nplayers'])
+	RELATIVE_ATTACK_POSITIONS = CONFIG['relative_attack_positions']
+
+	board = Board(nplayers = NPLAYERS, radius = 600, relative_attack_positions = RELATIVE_ATTACK_POSITIONS)
 
 	while True:
 		try:
@@ -138,7 +153,8 @@ def main():
 
 	t = int(time.time() * 1000)
 	os.makedirs(f'outputs/{t}')
-	shutil.copy('relative_attack_positions.txt', f'outputs/{t}/relative_attack_positions.txt')
+	shutil.copy('config.json', f'outputs/{t}/config.json')
+	plt.figure(figsize = (8, 8))
 	plt.imshow(board.arr)
 	plt.savefig(f'outputs/{t}/board.png')
 

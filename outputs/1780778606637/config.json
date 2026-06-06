@@ -1,0 +1,8 @@
+{
+	"nplayers" : 2,
+	"relative_attack_positions" : [
+		[7, 1],
+		[-5, -5],
+		[-2, 9]
+	]
+}
