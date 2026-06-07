@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 import math
 from collections import defaultdict
@@ -8,6 +8,8 @@ import time
 import shutil
 import os
 import json
+from PIL import Image
+
 
 def coords_to_spiral_index(x, y):
 	radius = max(abs(x), abs(y))
@@ -82,13 +84,22 @@ DEFAULT_REL_ATTACK_POS = [
 ]
 
 class Board:
-	def __init__(self, radius = 100, nplayers = 1, relative_attack_positions = DEFAULT_REL_ATTACK_POS):
-		self.radius = radius
+	def __init__(self, config):
+		self.config = config
+		self.radius = config['radius']
+		self.nplayers = config['nplayers']
+		self.relative_attack_positions = config['relative_attack_positions']
+
 		self.board = defaultdict(lambda : {'attacked_by' : set(), 'played_by' : -1})
-		self.lowest_playables = [0 for i in range(nplayers)]
-		self.nplayers = nplayers
-		self.arr = np.zeros(shape = (2 * radius + 1, 2 * radius + 1, 3)) + 1
-		self.relative_attack_positions = relative_attack_positions
+		for i in range(self.radius ** 2):
+			if i not in self.board:
+				pass
+		self.lowest_playables = [0 for i in range(self.nplayers)]
+		self.arr = np.zeros(shape = (2 * self.radius + 1, 2 * self.radius + 1, 3)) + 1
+
+		self.colors = np.random.random(size = (self.nplayers, 3))
+
+		print("Board initialized.")
 
 	def get_attacked_positions(self, n):
 		coords = spiral_index_to_coords(n)
@@ -102,11 +113,10 @@ class Board:
 		# if we have one player, recompute the lowest playable
 		# position as needed
 		if self.nplayers == 1:
-			if self.board[self.lowest_playables[player_ind]] != DEFAULT_BOARD_SQUARE_DICT:
-				while True:
-					self.lowest_playables[player_ind] += 1
-					if self.board[self.lowest_playables[player_ind]] == DEFAULT_BOARD_SQUARE_DICT:
-						break
+			while self.board[self.lowest_playables[0]] != -1 or self.board[self.lowest_playables[0]]['attacked_by'] != set([]):
+				self.lowest_playables[player_ind] += 1
+				if self.board[self.lowest_playables[player_ind]] == DEFAULT_BOARD_SQUARE_DICT:
+					break
 			return
 
 		# if this position happened to be another player's
@@ -128,38 +138,57 @@ class Board:
 		self.board[self.lowest_playables[player_ind]]['played_by'] = player_ind
 		arrpos = spiral_index_to_coords(self.lowest_playables[player_ind])
 		
-		color = np.array(colorsys.hsv_to_rgb(player_ind / self.nplayers, 1, 1))
-		self.arr[arrpos[1] + self.radius, arrpos[0] + self.radius] = color
+		self.arr[arrpos[1] + self.radius, arrpos[0] + self.radius] = self.colors[player_ind]
 
 		for pos in self.get_attacked_positions(self.lowest_playables[player_ind]):
 			self.attack_position(coords_to_spiral_index(pos[0], pos[1]), player_ind)
 
 
 def main():
-	with open('config.json', 'r') as f:
-		CONFIG = json.load(f)
-	NPLAYERS = int(CONFIG['nplayers'])
-	RELATIVE_ATTACK_POSITIONS = CONFIG['relative_attack_positions']
+	CONFIGS = [
+{
+	"radius" : 1000,
+	"nplayers" : 2,
+	"relative_attack_positions" : [
+		[1, 2],
+		[-5, 1],
+		[0, -4],
+		[-1, -2],
+		[5, -1],
+		[-0, -4],
+	]
+}
+	]
 
-	board = Board(nplayers = NPLAYERS, radius = 600, relative_attack_positions = RELATIVE_ATTACK_POSITIONS)
+	for config in CONFIGS:
+		for nplayers in range(1, 12):
+			config["nplayers"] = nplayers
+			board = Board(config = config)
 
-	while True:
-		try:
-			for player in range(board.nplayers):
-				board.play(player)
-		except Exception as e:
-			print(e)
-			break
+			while True:
+				try:
+					for player in range(board.nplayers):
+						board.play(player)
+						# plt.imshow(board.arr[::-1])
+						# plt.pause(0.1)
+						# plt.clf()
+				except Exception as e:
+					print(e)
+					break
 
-	t = int(time.time() * 1000)
-	os.makedirs(f'outputs/{t}')
-	shutil.copy('config.json', f'outputs/{t}/config.json')
-	plt.figure(figsize = (8, 8))
-	plt.imshow(board.arr)
-	plt.savefig(f'outputs/{t}/board.png')
+			t = int(time.time() * 1000)
+			os.makedirs(f'outputs/{t}')
+			with open(f'outputs/{t}/config.json', 'w') as f:
+				json.dump(board.config, f)
+			# plt.figure(figsize = (8, 8))
+			# plt.imshow(board.arr[::-1])
+			#plt.savefig(f'outputs/{t}/board.png')
 
+			array = (board.arr[::-1] * 255).astype(np.uint8)
+			img = Image.fromarray(array)
+			img.save(f'outputs/{t}/board.png')
 
-	# plt.imshow(board.arr)
-	plt.show()
+			# plt.imshow(board.arr)
+			# plt.show()
 
 main()
