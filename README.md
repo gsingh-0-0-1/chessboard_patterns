@@ -1,7 +1,7 @@
 ![cover](https://raw.githubusercontent.com/gsingh-0-0-1/chessboard_patterns/refs/heads/main/outputs/1780792171463/board.png)
 ![cover](https://raw.githubusercontent.com/gsingh-0-0-1/chessboard_patterns/refs/heads/main/outputs/1780808582263/board.png)
 
-Was watching Numberphile's video here: https://www.youtube.com/watch?v=UiX4CFIiegM and decided to make my own plotter.
+Was watching Numberphile's video here: https://www.youtube.com/watch?v=UiX4CFIiegM (and then the follow-up here: https://www.youtube.com/watch?app=desktop&v=VgmDuBCayPw) and decided to make my own plotter.
 
 You can just run `python main.py` and the script will create a directory with the output image and the config options used.
 

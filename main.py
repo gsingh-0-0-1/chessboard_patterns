@@ -88,7 +88,7 @@ class Board:
 		self.lowest_playables = [0 for i in range(self.nplayers)]
 		self.arr = np.zeros(shape = (2 * self.radius + 1, 2 * self.radius + 1, 3)) + 1
 
-		self.colors = np.random.random(size = (self.nplayers, 3))
+		self.colors = np.array(config['colors'])
 
 		print("Board initialized.")
 
@@ -134,8 +134,33 @@ class Board:
 		for pos in self.get_attacked_positions(self.lowest_playables[player_ind], player_ind):
 			self.attack_position(coords_to_square_spiral_index(pos[0], pos[1]), player_ind)
 
-def circle_coords(r):
-	return list(set([(int(r * math.cos(theta)), int(r * math.sin(theta))) for theta in np.arange(0, 2 * math.pi, 0.01)]))
+	def clear_old_entries(self, n):
+		# helps with saving memory for large generations
+		# if we are at spiral index n, we probably don't need to keep
+		# entries from spiral index < n
+
+		radius = math.floor(math.sqrt(n))
+		thresh = n - 10 * 4 * radius
+
+		deletes = []
+		for key in self.board:
+			if key < thresh:
+				deletes.append(key)
+
+		for d in deletes:
+			del self.board[d]
+
+def circle_coords(r, theta_max = 2 * np.pi):
+	return list(set([(int(r * math.cos(theta)), int(r * math.sin(theta))) for theta in np.arange(0, theta_max, 0.1 / r)]))
+
+def filled_circle_coords(r):
+	l = []
+	for x in range(-r, r + 1):
+		for y in range(-r, r + 1):
+			if x**2 + y**2 <= r ** 2:
+				l.append([x, y])
+
+	return l
 
 def knight_coords(l_len = 1):
 	l = []
@@ -148,22 +173,56 @@ def knight_coords(l_len = 1):
 	return l
 
 def main():
+	'''
 	CONFIGS = [
 		{
-		"radius": 1000,
-		"nplayers": 4,
+		"radius": 2500,
+		"nplayers": 3,
 		"relative_attack_positions": [
-			knight_coords() + knight_coords(2) + knight_coords(4) + knight_coords(8),
-			knight_coords() + knight_coords(2) + knight_coords(4),
-			knight_coords() + knight_coords(2),
-			knight_coords()
-		]
+			[
+				[7, 1],
+				[-7, -1]
+			],
+			[
+				[3, 1],
+				[-3, -1]
+			],
+			[
+				[2, 1],
+				[-2, -1],
+				[11, 0],
+				[-11, 0]
+			]
+			]
 		}
 	]
+	'''
+
+	CONFIGS = [
+		{
+		"radius": 1500,
+		"nplayers": 5,
+		"relative_attack_positions": [
+			filled_circle_coords(3),
+			circle_coords(3),
+			knight_coords(),
+			[[-2, -2], [2, 2]],
+			knight_coords(6)
+		],
+		"colors": np.random.random(size = (5, 3)).tolist()
+		}
+	]
+
 
 	for config in CONFIGS:
 		board = Board(config = config)
 
+		t = int(time.time() * 1000)
+		os.makedirs(f'outputs/{t}')
+		with open(f'outputs/{t}/config.json', 'w') as f:
+			json.dump(board.config, f)
+
+		i = 0
 		while True:
 			try:
 				for player in range(board.nplayers):
@@ -175,13 +234,14 @@ def main():
 				print(e)
 				break
 
-		t = int(time.time() * 1000)
-		os.makedirs(f'outputs/{t}')
-		with open(f'outputs/{t}/config.json', 'w') as f:
-			json.dump(board.config, f)
-		# plt.figure(figsize = (8, 8))
-		# plt.imshow(board.arr[::-1])
-		#plt.savefig(f'outputs/{t}/board.png')
+			i += 1
+			if i % 1000 == 0:
+				board.clear_old_entries(min(board.lowest_playables))
+
+
+			# plt.figure(figsize = (8, 8))
+			# plt.imshow(board.arr[::-1])
+			#plt.savefig(f'outputs/{t}/board.png')
 
 		array = (board.arr[::-1] * 255).astype(np.uint8)
 		img = Image.fromarray(array)
