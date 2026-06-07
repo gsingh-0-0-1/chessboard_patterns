@@ -12,4 +12,6 @@ Some favorites:
 
 https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780787086623/board2.png
 https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780792171463/board.png
+https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780794244151/board.png
 
+<a href="https://github.com/gsingh-0-0-1/chessboard_patterns">Chessboard Patterns</a> © 2026 by <a href="https://github.com/gsingh-0-0-1">Gurmehar Singh</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
