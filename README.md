@@ -7,7 +7,7 @@ You can just run `python main.py` and the script will create a directory with th
 
 Right now the main script just has a list defined in a loop where you can set up a set of attack positions and then loop over the number of players to generate images. This is a bit messy, but it works for now, so I'll leave it as-is. I just wanted to make it easier to run the script once, leave it going, and then get my results back.
 
-You can see the board for 2 opposing knights as shown in the video here: https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780776689/board.png
+You can see the board for 2 opposing knights as shown in the video here: https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780857654395/board.png
 
 Some favorites:
 
