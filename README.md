@@ -1,5 +1,5 @@
 ![cover](https://raw.githubusercontent.com/gsingh-0-0-1/chessboard_patterns/refs/heads/main/outputs/1780792171463/board.png)
-![cover](https://raw.githubusercontent.com/gsingh-0-0-1/chessboard_patterns/refs/heads/main/outputs/1780808429883/board.png)
+![cover](https://raw.githubusercontent.com/gsingh-0-0-1/chessboard_patterns/refs/heads/main/outputs/1780808582263/board.png)
 
 Was watching Numberphile's video here: https://www.youtube.com/watch?v=UiX4CFIiegM and decided to make my own plotter.
 
@@ -19,6 +19,6 @@ https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780795310
 https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780796151287/board3.png
 https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780801298316/board.png
 https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780807571797/board.png
-https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780808429883/board.png
+https://github.com/gsingh-0-0-1/chessboard_patterns/blob/main/outputs/1780808582263/board.png
 
 <a href="https://github.com/gsingh-0-0-1/chessboard_patterns">Chessboard Patterns</a> © 2026 by <a href="https://github.com/gsingh-0-0-1">Gurmehar Singh</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
