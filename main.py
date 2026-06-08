@@ -9,61 +9,10 @@ import shutil
 import os
 import json
 from PIL import Image
-
-
-
-def coords_to_square_spiral_index(x, y):
-	radius = max(abs(x), abs(y))
-	if radius == 0: return 0
-	starting_perfect_square_root = (radius * 2 - 1)
-
-	spiral_index = 0
-
-	if x == radius:
-		spiral_index = (starting_perfect_square_root ** 2) + (y + radius - 1)
-	if x == -radius:
-		spiral_index = (starting_perfect_square_root + 1) ** 2 + (-y + radius)
-	if y == radius:
-		spiral_index = (starting_perfect_square_root ** 2) + (2 * radius - 1) + (-x + radius)
-	if y == -radius:
-		spiral_index = (starting_perfect_square_root + 2) ** 2 - (-x + radius + 1)
-
-	return spiral_index
-
-
-def square_spiral_index_to_coords(spiral_index):
-	# compute coordinates based on square number
-	radius = math.floor(math.sqrt(spiral_index))
-	if radius % 2 == 0:
-		radius -= 1
-
-	radius = math.floor(radius / 2) + 1
-
-	starting_perfect_square_root = (radius * 2 - 1)
-
-	x = radius
-	y = -(radius - 1)
-
-
-	inner_radius = radius - 1
-
-	top_right = (starting_perfect_square_root ** 2) + (2 * inner_radius) + 1
-	top_left = (starting_perfect_square_root + 1) ** 2
-	bottom_left = (starting_perfect_square_root + 1) ** 2 + (2 * inner_radius) + 2
-
-	if spiral_index <= top_right:
-		y = y + (spiral_index - (starting_perfect_square_root ** 2))
-	if top_right < spiral_index <= top_left:
-		y = radius
-		x = x - (spiral_index - top_right)
-	if top_left < spiral_index <= bottom_left:
-		x = -radius
-		y = radius - (spiral_index - top_left)
-	if bottom_left < spiral_index < (starting_perfect_square_root + 2) ** 2:
-		y = -radius
-		x = -radius + (spiral_index - bottom_left)
-
-	return (x, y)
+from coordinate_utils import (
+	coords_to_square_spiral_index,
+	square_spiral_index_to_coords
+)
 
 
 def board_square_dict(attacked_by: set = set(), played_by: int = -1):
@@ -200,16 +149,14 @@ def main():
 
 	CONFIGS = [
 		{
-		"radius": 1500,
-		"nplayers": 5,
+		"radius": 500,
+		"nplayers": 3,
 		"relative_attack_positions": [
-			filled_circle_coords(3),
-			circle_coords(3),
-			knight_coords(),
-			[[-2, -2], [2, 2]],
-			knight_coords(6)
+			[[4, 0], [-4, 0], [0, 4], [0, -4]],
+			[[2, 0], [-2, 0], [0, -2], [0, 2]],
+			[[-1, -1], [1, 1], [1, -1], [-1, 1]]
 		],
-		"colors": np.random.random(size = (5, 3)).tolist()
+		"colors": np.random.random(size = (3, 3)).tolist()
 		}
 	]
 
