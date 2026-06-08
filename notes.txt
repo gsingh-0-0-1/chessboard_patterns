@@ -1,21 +1,4 @@
 Fun one with a cross in the middle: 1780809265210
 
+Interesting one that maintains remarkably intricate structures at high radii: 1780900063051
 
-I've been thinking about trying to predict the structure of a 2D region from the corresponding 
-player attack patterns. If we take this problem into one dimension, where the players are playing 
-on simply an infinite linear strip rather than an infinite 2D grid, we can then think about wrapping
-this 1D strip around in a spiral to create a 2D board. Then, we can see that areas on this 2D board
-that correspond to large regions of pieces belonging to the same player occur when, in the 
-one-dimensional case, pieces belonging to that player occur with a frequency equivalent to that
-of the winding frequency of the spiral. Moreover, the lower the difference is between the rate 
-of change of the winding frequency and the rate of change of the frequency of those pieces occcuring(*1),
-the larger the region ends up being. Naively, it seems like a DFT could help do some predictive 
-thinking here, or at the very least, it could help understand which types of attack patterns
-produce what kinds of structural patterns.
-
-I'm working through a refactor right now that should let me manipulate 1D board arrays into spirals
-a bit more easily -- really, it should let me consider the n-dimensional case of a problem like this.
-Then I might be able to start thinking about predicting structure.
-
-
-(*1) the rate of change of the winding frequency wrt. the radius
