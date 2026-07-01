@@ -1,6 +1,31 @@
 import math
 import numpy as np
 
+def array_coords_to_square_spiral_index(coords):
+    x = coords[..., 0]
+    y = coords[..., 1]
+
+    radius = np.maximum(np.abs(x), np.abs(y))
+    s = 2 * radius - 1
+
+    out = np.zeros_like(radius)
+
+    mask = radius != 0
+
+    m = mask & (x == radius)
+    out[m] = s[m]**2 + (y[m] + radius[m] - 1)
+
+    m = mask & (x == -radius)
+    out[m] = (s[m] + 1)**2 + (-y[m] + radius[m])
+
+    m = mask & (y == radius)
+    out[m] = s[m]**2 + (2 * radius[m] - 1) + (-x[m] + radius[m])
+
+    m = mask & (y == -radius)
+    out[m] = (s[m] + 2)**2 - (-x[m] + radius[m] + 1)
+
+    return out
+
 def coords_to_square_spiral_index(x, y):
 	radius = max(abs(x), abs(y))
 	if radius == 0: return 0
@@ -55,18 +80,22 @@ def square_spiral_index_to_coords(spiral_index):
 	return np.array([x, y])
 
 
-def knight_coords(l_len_mult = 1):
+def knight_coords(l_length_multipliers: list[int] = [1]):
 	# for a knight attack pattern of len `l_len`
 	# times longer than the standard 2-1 
 	# hook (i.e. a (l_len * 2, l_len) hook)
 	# we need a square-shaped array that is 
 	# 2 * (2 * l_len) - 1 long on both sides
-	side = 2 * (2 * l_len_mult) + 1
+	max_l_len = max(l_length_multipliers)
+	side = 2 * (2 * max_l_len) + 1
 	arr = np.zeros(shape = (side, side))
 
-	for xm in [-l_len_mult, l_len_mult]:
-		for ym in [-l_len_mult, l_len_mult]:
-			arr[(2 * l_len_mult) + 2 * xm, (2 * l_len_mult) + 1 * ym] = 1
-			arr[(2 * l_len_mult) + 1 * xm, (2 * l_len_mult) + 2 * ym] = 1
+	center = 2 * max_l_len
+
+	for xm in [-1, 1]:
+		for ym in [-1, 1]:
+			for l_len_mult in l_length_multipliers:
+				arr[center + 2 * l_len_mult * xm, center + 1 * l_len_mult * ym] = 1
+				arr[center + 1 * l_len_mult * xm, center + 2 * l_len_mult * ym] = 1
 
 	return arr
