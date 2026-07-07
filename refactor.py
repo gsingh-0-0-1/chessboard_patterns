@@ -184,12 +184,8 @@ config = {
 		},
 		{
 			'type' : 'knight',
-			'arguments' : [[2]]
-		},
-		{
-			'type' : 'knight',
-			'arguments' : [[4]]
-		},
+			'arguments' : []
+		}
 	]
 }
 

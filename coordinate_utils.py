@@ -99,3 +99,30 @@ def knight_coords(l_length_multipliers: list[int] = [1]):
 				arr[center + 1 * l_len_mult * xm, center + 2 * l_len_mult * ym] = 1
 
 	return arr
+
+
+def plus_shape_coords(l_lengths: list[int] = [1]):
+	side = 2 * max(l_lengths) + 1
+	arr = np.zeros(shape = (side, side))
+	center = max(l_lengths)
+
+	for l_len in l_lengths:
+		arr[center - l_len, center] = 1
+		arr[center + l_len, center] = 1
+		arr[center, center - l_len] = 1
+		arr[center, center + l_len] = 1
+
+	return arr
+
+def x_shape_coords(x_lengths: list[int] = [1]):
+	side = 2 * max(x_lengths) + 1
+	arr = np.zeros(shape = (side, side))
+	center = max(x_lengths)
+
+	for x_len in x_lengths:
+		arr[center - x_len, center - x_len] = 1
+		arr[center - x_len, center + x_len] = 1
+		arr[center + x_len, center - x_len] = 1
+		arr[center + x_len, center + x_len] = 1
+
+	return arr
