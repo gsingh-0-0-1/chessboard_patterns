@@ -191,10 +191,10 @@ config = {
         'extent': [20001, 20001],
         'ordering': 'SQUARE_SPIRAL_2D'
     },
-    'players': [
-        {'type': 'plus_shape', 'arguments': [[1]]},
-        {'type': 'x_shape', 'arguments': [[2]]},
-        {'type': 'plus_shape', 'arguments': [[4]]}
+    "players": [
+    	{"type": "x_shape", "arguments": [[1]]},
+    	{"type": "plus_shape", "arguments": [[2]]},
+    	{"type": "x_shape", "arguments": [[4]]},
     ]
 }
 
